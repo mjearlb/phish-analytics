@@ -1,6 +1,18 @@
 package com.mjearlb.api;
 
 import com.google.gson.Gson;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.net.http.HttpRequest;
+import java.nio.charset.StandardCharsets;
 
 public class RequestPhishData {
     
@@ -37,5 +49,11 @@ public class RequestPhishData {
     /** For use with the Phish.net API. */
     private static final String PHISH_NET_API = "https://api.phish.net/v5/";
     private static final String PHISH_NET_KEY = ".json?apikey=";
+
+    /** HTTP client. */
+    private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
+        .version(HttpClient.Version.HTTP_2)
+        .followRedirects(HttpClient.Redirect.NORMAL)
+        .build();
 
 } // RequestPhishData
