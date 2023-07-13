@@ -56,4 +56,9 @@ public class RequestPhishData {
         .followRedirects(HttpClient.Redirect.NORMAL)
         .build();
 
+    /** Google {@code Gson} object for parsing JSON-formatted strings. */
+    private static Gson GSON = new GsonBuilder()
+        .setPrettyPrinting()
+        .create();
+
 } // RequestPhishData
