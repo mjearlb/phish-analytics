@@ -63,4 +63,14 @@ public class RequestPhishData {
         .setPrettyPrinting()
         .create();
 
+    /**
+     * Contact Phish.net API using HTTP GET request.
+     *
+     * @param requestType the type of request user wants to make to Phish.net.
+     * @return array of PhishData var's we get from Phish.net. 
+     */
+    public static PhishData[] contactPhishNet(String requestType) {
+
+    } // contactPhishNet
+
 } // RequestPhishData
