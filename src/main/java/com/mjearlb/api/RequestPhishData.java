@@ -14,6 +14,8 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 
+import com.mjearlb.api.PhishNetApiKey;
+
 public class RequestPhishData {
     
     /** Response from the Phish.net API request. */
@@ -48,7 +50,7 @@ public class RequestPhishData {
 
     /** For use with the Phish.net API. */
     private static final String PHISH_NET_API = "https://api.phish.net/v5/";
-    private static final String PHISH_NET_KEY = ".json?apikey=";
+    private static final String PHISH_NET_KEY = ".json?apikey=" + PhishNetApiKey.PRIVATE_API_KEY;
 
     /** HTTP client. */
     private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
