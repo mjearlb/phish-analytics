@@ -70,7 +70,10 @@ public class RequestPhishData {
      * @return array of PhishData var's we get from Phish.net. 
      */
     public static PhishData[] contactPhishNet(String requestType) {
+	String uri = PHISH_NET_API + requestType + PHISH_NET_KEY; 
+	System.out.print(uri);
 
+	return null;
     } // contactPhishNet
 
 } // RequestPhishData
