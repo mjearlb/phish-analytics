@@ -1,7 +1,8 @@
 package com.mjearlb.api;
 
-protected class PhishNetApiKey {
+public class PhishNetApiKey {
 
-    protected static final string PRIVATE_API_KEY = "";
+    protected static final String PRIVATE_API_KEY = "";
+    protected static final String PUBLIC_API_KEY = "";
 
 } // PhishNetApiKey
