@@ -70,13 +70,48 @@ public class RequestPhishData {
      * Contact Phish.net API using HTTP GET request.
      *
      * @param requestType the type of request user wants to make to Phish.net.
-     * @return array of PhishData var's we get from Phish.net.
+     * @return PhishData response we get from Phish.net API.
      */
-    public static PhishData[] contactPhishNet(String requestType) {
-        String uri = PHISH_NET_API + requestType + PHISH_NET_KEY;
-        System.out.print(uri);
+    public static PhishData contactPhishNet(String requestType) {
+        PhishData phishData = null;
+        try {
+            String uri = PHISH_NET_API + requestType + PHISH_NET_KEY;
 
-        return null;
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .build();
+
+            HttpResponse<String> response = HTTP_CLIENT
+                .send(request, BodyHandlers.ofString());
+
+            // Check that request is okay.
+            if (response.statusCode() != 200) {
+                throw new IOException(response.toString());
+            } // if
+
+            phishData = GSON
+                .fromJson(response.body(), PhishData.class);
+
+            printPhishData(phishData);
+
+        } catch (IOException | InterruptedException e) {
+            System.err.println(e);
+            e.printStackTrace();
+        } // try/catch
+
+        return phishData;
     } // contactPhishNet
+
+    /**
+     * Allows for a {@code PhishData} object to be easily printed
+     * to terminal.
+     *
+     * @param phishData the PhishData to be printed.
+     */
+    public static void printPhishData(PhishData phishData) {
+        for (int i = 0; i < phishData.data.length; i++) {
+            System.out.println(phishData.data[i].showYear);
+        } // for
+    } // printPhishData
 
 } // RequestPhishData
