@@ -1,7 +1,6 @@
 package com.mjearlb.api;
 
 import com.google.gson.Gson;
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
@@ -13,6 +12,8 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import com.mjearlb.api.PhishNetApiKey;
 
@@ -26,6 +27,23 @@ public class RequestPhishData {
         boolean error;
         @SerializedName("error_message") String errorMessage;
         Show[] data;
+
+        @Override
+        public String toString() {
+            String str = ""; 
+
+            for (int i = 0; i < this.data.length; i++) {
+                str += this.data[i].showDate + ": " + this.data[i].venue + " - " + this.data[i].city + ", " + this.data[i].state + " " + this.data[i].country + "\n"; 
+            } // for
+
+            return str; 
+        } // toString
+
+        /** Sorts the data array by show date. */
+        public void sortByShowDate() {
+            Arrays.sort(data, Comparator.comparing(Show::getShowDate));
+        } // sortByShowDate
+
     } // PhishData
 
     /** Data for each show from the Phish.net API. */
@@ -49,6 +67,11 @@ public class RequestPhishData {
         @SerializedName("tour_name") String tourName;
         @SerializedName("created_at") String createdAt;
         @SerializedName("updated_at") String updatedAt;
+
+        /** Returns the showDate var */
+        public String getShowDate() {
+            return showDate; 
+        } // getShowDate
     } // Data
 
     /** For use with the Phish.net API. */
@@ -70,13 +93,34 @@ public class RequestPhishData {
      * Contact Phish.net API using HTTP GET request.
      *
      * @param requestType the type of request user wants to make to Phish.net.
-     * @return array of PhishData var's we get from Phish.net.
+     * @return phishData the data we recieve from our API request to Phish.net. 
      */
-    public static PhishData[] contactPhishNet(String requestType) {
+    public static PhishData contactPhishNet(String requestType) {
         String uri = PHISH_NET_API + requestType + PHISH_NET_KEY;
-        System.out.print(uri);
+        PhishData phishData = null; 
+        
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(uri))
+                .build();
 
-        return null;
+            HttpResponse<String> response = HTTP_CLIENT
+                .send(request, BodyHandlers.ofString());
+
+            // check request is okay
+            if (response.statusCode() != 200) {
+                throw new IOException(response.toString());
+            } // if
+
+            phishData = GSON
+                .fromJson(response.body(), PhishData.class);
+
+        } catch (IOException | InterruptedException e) {
+            System.err.println(e);
+            e.printStackTrace();
+        } // try/catch
+
+        return phishData;
     } // contactPhishNet
 
 } // RequestPhishData
